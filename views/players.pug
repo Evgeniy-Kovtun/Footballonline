@@ -1,0 +1,72 @@
+extends layout
+block content
+        h1(align='center') Футбольные игроки
+        p
+        table(align='center' width='60%')
+                tr
+                        td(width='30%')
+                                a.btn.btn-warning(type='button', data-toggle='modal', data-target='#myModal') Создать
+        p
+        .row
+                .col-lg-12.col-md-12.col-sm-12.col-xs-12
+                        table(class='table task-table' width='100%')
+                                thead
+                                        tr
+                                                td(width='20%')
+                                                        h4 ФИО
+                                                td(width='20%')
+                                                        h4 Дата рождения
+                                                td(width='20%')
+                                                        h4 Страна
+                                                td(width='20%')
+                                                        h4 Клуб
+                                                td(width='20%')
+                                                        h4 Игровая позиция
+
+
+                                tbody
+                                    if(players)
+                                        each v in players
+                                            tr(id=v._id)
+                                                td(width='20%')
+                                                    h4 #{v.Name}
+                                                td(width='20%')
+                                                    h4 #{v.PDate}
+                                                td(width='20%')
+                                                    h4 #{v.Country}
+                                                td(width='20%')
+                                                    h4 #{v.Club}
+                                                td(width='20%')
+                                                    h4 #{v.Role}
+                                                td(width='5%')
+                                                    a.btn.btn-danger(href="/remove" class="remove" data-id=v._id) Удалить
+
+        #myModal.modal.fade(tabindex='-1', role='dialog')
+                .modal-dialog.custom-class(role='document')
+                        .modal-content
+                                .modal-header
+                                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                        h4.modal-title Новый игрок
+                                .modal-body
+                                        form(id="create-form" class="form-horizontal")
+                                                input(type="hidden" name="ownProject" value=ownProject)
+                                                label(for='Name') ФИО игрока
+                                                textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name")
+                                                label(for='PDate') Дата рождения
+                                                textarea#PDate.form-control(minlength='5', maxlength='512', required='' name="PDate")
+                                                label(for='Country') Страна
+                                                textarea#Country.form-control(minlength='5', maxlength='512', required='' name="Country")
+                                                label(for='Club') Клуб, за который выступает игрок
+                                                textarea#Club.form-control(minlength='5', maxlength='512', required='' name="Club")
+                                                label(for='Role') Игровая позиция
+                                                select#Role.inline(name='Role')
+                                                        option(value='Вратарь(ВР)', selected='selected') Вратарь(ВР)
+                                                        option(value='Центральный защитник(ЦЗ)') Центральный защитник(ЦЗ)
+                                                        option(value='Фланговый защитник(ФЗ)') Фланговый защитник(ФЗ)
+                                                        option(value='Опорный полузащитник(ОП)') Опорный полузащитник(ОП)
+                                                        option(value='Фланговый защитник(ФЗ)') Фланговый полузащитник(ФП)
+                                                        option(value='Центральный нападающий(ЦН)') Центральный нападающий(ЦН)
+                                .modal-footer
+                                        button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
+                                        button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Создать
