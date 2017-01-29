@@ -70,3 +70,44 @@ block content
                                 .modal-footer
                                         button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
                                         button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Создать
+        script.
+            $(function () {
+                $("#create-form").on('submit', function (e) {
+                    console.log("dhdhdfhdf");
+                    $.ajax({
+                        method: "POST",
+                        url: "/createPlayers",
+                        data: $(this).serialize()
+                    })
+                        .fail(function (error) {
+                            // show error message
+                        })
+                        .success(function (data) {
+                            console.log(data);
+                            $(".task-table tbody").append("<tr><td>" + data.Name + "</td><td>" + data.PDate + "</td><td>" + data.Country + "</td><td>" + data.Club + "</td><td>" + data.Role + "</td></tr>");
+                        })
+                        .always(function () {
+                            $("#myModal").modal("hide");
+
+                        });
+                    e.preventDefault();
+                })
+            });
+            $(document).ready(function () {
+                $('.remove').click(function (t) {
+                    $.ajax({
+                        method: "POST",
+                        url: "/removePlayers",
+                        data: {id: $(this).data('id')}
+                    })
+                        .fail(function (error) {
+                            // show error message
+                        })
+                        .success(function (data) {
+                            console.log(data);
+                            $("#" + data.id).remove();
+                        })
+                    t.preventDefault();
+
+                });
+            });
