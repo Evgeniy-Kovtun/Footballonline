@@ -4,12 +4,47 @@ block content
         p
         table(align='center' width='60%')
                 tr
-                        td(width='30%')
-                                a.btn.btn-warning(type='button', data-toggle='modal', data-target='#myModal') Создать
+                    td(width='30%')
+                    td(width='30%')
+                                a.btn.btn-warning(type='button', data-toggle='modal', data-target='#myModal') Добавить игрока
+                    td(width='30%')
+        p
+        h3(align='center') Фильтр игроков
+
+        table(width='100%')
+            thead
+                tr
+                    td(width='20%')
+                        h4 ФИО
+                    td(width='20%')
+                        h4 Дата рождения
+                    td(width='20%')
+                        h4 Страна
+                    td(width='20%')
+                        h4 Клуб
+                    td(width='20%')
+                        h4 Игровая позиция
+
+
+            tbody
+                tr
+                    td(width='20%')
+                        input(name="filt" onkeyup="filt1(this, 'sf')" style="width:350px;" type="text")
+                    td(width='20%')
+                        input(name="filt1" onkeyup="filt2(this, 'sf')" style="width:350px;" type="text")
+                    td(width='20%')
+                        input(name="filt2" onkeyup="filt3(this, 'sf')" style="width:350px;" type="text")
+                    td(width='20%')
+                        input(name="filt3" onkeyup="filt4(this, 'sf')" style="width:350px;" type="text")
+                    td(width='20%')
+                        input(name="filt4" onkeyup="filt5(this, 'sf')" style="width:350px;" type="text")
+
+        p
+        h3(align='center') Таблица игроков
         p
         .row
                 .col-lg-12.col-md-12.col-sm-12.col-xs-12
-                        table(class='table task-table' width='100%')
+                        table(class='table task-table' width='100%' id="sf")
                                 thead
                                         tr
                                                 td(width='20%')
@@ -112,3 +147,88 @@ block content
 
                 });
             });
+            function filt1(phrase, _id) {
+                var words = phrase.value.toLowerCase().split(" ");
+                var table = document.getElementById(_id);
+                for (var r = 1; r < table.rows.length; r++) {
+                    var cellsV = table.rows[r].cells[0].innerHTML.replace(/<[^>]+>/g, ""); //указать первый столбец
+                    var displayStyle = 'none';
+                    for (var i = 0; i < words.length; i++) {
+                        if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                            displayStyle = '';
+                        else {
+                            displayStyle = 'none';
+                            break;
+                        }
+                    }
+                    table.rows[r].style.display = displayStyle;
+                }
+            }
+            function filt2(phrase, _id) {
+                var words = phrase.value.toLowerCase().split(" ");
+                var table = document.getElementById(_id);
+                for (var r = 1; r < table.rows.length; r++) {
+                    var cellsV = table.rows[r].cells[1].innerHTML.replace(/<[^>]+>/g, "");
+                    var displayStyle = 'none';
+                    for (var i = 0; i < words.length; i++) {
+                        if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                            displayStyle = '';
+                        else {
+                            displayStyle = 'none';
+                            break;
+                        }
+                    }
+                    table.rows[r].style.display = displayStyle;
+                }
+            }
+            function filt3(phrase, _id) {
+                var words = phrase.value.toLowerCase().split(" ");
+                var table = document.getElementById(_id);
+                for (var r = 1; r < table.rows.length; r++) {
+                    var cellsV = table.rows[r].cells[2].innerHTML.replace(/<[^>]+>/g, "");
+                    var displayStyle = 'none';
+                    for (var i = 0; i < words.length; i++) {
+                        if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                            displayStyle = '';
+                        else {
+                            displayStyle = 'none';
+                            break;
+                        }
+                    }
+                    table.rows[r].style.display = displayStyle;
+                }
+            }
+            function filt4(phrase, _id) {
+                var words = phrase.value.toLowerCase().split(" ");
+                var table = document.getElementById(_id);
+                for (var r = 1; r < table.rows.length; r++) {
+                    var cellsV = table.rows[r].cells[3].innerHTML.replace(/<[^>]+>/g, "");
+                    var displayStyle = 'none';
+                    for (var i = 0; i < words.length; i++) {
+                        if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                            displayStyle = '';
+                        else {
+                            displayStyle = 'none';
+                            break;
+                        }
+                    }
+                    table.rows[r].style.display = displayStyle;
+                }
+            }
+            function filt5(phrase, _id) {
+                var words = phrase.value.toLowerCase().split(" ");
+                var table = document.getElementById(_id);
+                for (var r = 1; r < table.rows.length; r++) {
+                    var cellsV = table.rows[r].cells[4].innerHTML.replace(/<[^>]+>/g, "");
+                    var displayStyle = 'none';
+                    for (var i = 0; i < words.length; i++) {
+                        if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                            displayStyle = '';
+                        else {
+                            displayStyle = 'none';
+                            break;
+                        }
+                    }
+                    table.rows[r].style.display = displayStyle;
+                }
+            }
