@@ -84,7 +84,7 @@ block content
                                                 span(aria-hidden='true') ×
                                         h4.modal-title Новый игрок
                                 .modal-body
-                                        // в этой форме чего-то не хватает )) Начни сперва с этого момента
+
                                         form(id="create-form" class="form-horizontal")
                                                 input(type="hidden" name="ownProject" value=ownProject)
                                                 label(for='Name') ФИО игрока
@@ -105,7 +105,7 @@ block content
                                                         option(value='Центральный нападающий(ЦН)') Центральный нападающий(ЦН)
                                 .modal-footer
                                         button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
-                                        button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Создать
+                                        button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Добавить игрока
         script.
             $(function () {
                 $("#create-form").on('submit', function (e) {

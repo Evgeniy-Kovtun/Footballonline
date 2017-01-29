@@ -1,0 +1,201 @@
+extends layout
+block content
+    h1(align='center') Тренеры
+    p
+    table(align='center' width='60%')
+        tr
+            td(width='30%')
+            td(width='30%')
+                a.btn.btn-warning(type='button', data-toggle='modal', data-target='#myModal') Добавить тренера
+            td(width='30%')
+    p
+    h3(align='center') Фильтр тренеров
+    table(width='100%')
+        thead
+            tr
+                td(width='25%')
+                    h4 ФИО
+                td(width='25%')
+                    h4 Страна
+                td(width='25%')
+                    h4 Возраст
+                td(width='25%')
+                    h4 Статус
+        tbody
+            tr
+                td(width='20%')
+                    input(name="filt" onkeyup="filt1(this, 'sf')" style="width:350px;" type="text")
+                td(width='20%')
+                    input(name="filt1" onkeyup="filt2(this, 'sf')" style="width:350px;" type="text")
+                td(width='20%')
+                    input(name="filt2" onkeyup="filt3(this, 'sf')" style="width:350px;" type="text")
+                td(width='20%')
+                    input(name="filt3" onkeyup="filt4(this, 'sf')" style="width:350px;" type="text")
+    p
+    h3(align='center') Таблица тренеров
+    p
+    .row
+        .col-lg-12.col-md-12.col-sm-12.col-xs-12
+            table(class='table task-table' width='100%' id="sf")
+                thead
+                    tr
+                        td(width='25%')
+                            h4 ФИО
+                        td(width='25%')
+                            h4 Страна
+                        td(width='25%')
+                            h4 Возраст
+                        td(width='25%')
+                            h4 Статус
+                tbody
+                    if(coutchs)
+                        each v in coutchs
+                            tr(id=v._id)
+                                td(width='25%')
+                                    h4 #{v.CName}
+                                td(width='25%')
+                                    h4 #{v.CCountry}
+                                td(width='25%')
+                                    h4 #{v.CAge}
+                                td(width='25%')
+                                    h4 #{v.CZan}
+                                td(width='5%')
+                                    a.btn.btn-danger(href="/remove" class="remove" data-id=v._id) Удалить
+
+    #myModal.modal.fade(tabindex='-1', role='dialog')
+        .modal-dialog.custom-class(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') ×
+                    h4.modal-title Новый тренер
+                .modal-body
+
+                    form(id="create-form" class="form-horizontal")
+                        input(type="hidden" name="ownProject" value=ownProject)
+                        label(for='CName') ФИО
+                        textarea#CName.form-control(minlength='5', maxlength='512', required='' name="CName")
+                        label(for='CCountry') Страна
+                        textarea#CCountry.form-control(minlength='5', maxlength='512', required='' name="CCountry")
+                        label(for='CAge') Возраст
+                        textarea#CAge.form-control(minlength='5', maxlength='512', required='' name="CAge")
+                        label(for='CZan') Статус
+                        select#CZan.inline(name='CZan')
+                            option(value='Свободный агент', selected='selected') Свободный агент
+                            option(value='Подписан контракт') Подписан контракт
+                .modal-footer
+                    button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
+                    button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Добавить тренера
+    script.
+        $(function () {
+            $("#create-form").on('submit', function (F) {
+                console.log("");
+                $.ajax({
+                    method: "POST",
+                    url: "/createCoutchs",
+                    data: $(this).serialize()
+                })
+                    .fail(function (error) {
+                        // show error message
+                    })
+                    .success(function (data) {
+                        console.log(data);
+                        $(".task-table tbody").append("<tr><td>" + data.CName + "</td><td>" + data.CCountry + "</td><td>" + data.CAge + "</td><td>" + data.CZan + "</td></tr>");
+                    })
+                    .always(function () {
+                        $("#myModal").modal("hide");
+
+                    });
+                F.preventDefault();
+            })
+        });
+        $(document).ready(function () {
+            $('.remove').click(function (FD) {
+                $.ajax({
+                    method: "POST",
+                    url: "/removeCoutchs",
+                    data: {id: $(this).data('id')}
+                })
+                    .fail(function (error) {
+                        // show error message
+                    })
+                    .success(function (data) {
+                        console.log(data);
+                        $("#" + data.id).remove();
+                    })
+                FD.preventDefault();
+
+            });
+        });
+        function filt1(phrase, _id) {
+            var words = phrase.value.toLowerCase().split(" ");
+            var table = document.getElementById(_id);
+            for (var r = 1; r < table.rows.length; r++) {
+                var cellsV = table.rows[r].cells[0].innerHTML.replace(/<[^>]+>/g, ""); //указать первый столбец
+                var displayStyle = 'none';
+                for (var i = 0; i < words.length; i++) {
+                    if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                        displayStyle = '';
+                    else {
+                        displayStyle = 'none';
+                        break;
+                    }
+                }
+                table.rows[r].style.display = displayStyle;
+            }
+        }
+        function filt2(phrase, _id) {
+            var words = phrase.value.toLowerCase().split(" ");
+            var table = document.getElementById(_id);
+            for (var r = 1; r < table.rows.length; r++) {
+                var cellsV = table.rows[r].cells[1].innerHTML.replace(/<[^>]+>/g, "");
+                var displayStyle = 'none';
+                for (var i = 0; i < words.length; i++) {
+                    if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                        displayStyle = '';
+                    else {
+                        displayStyle = 'none';
+                        break;
+                    }
+                }
+                table.rows[r].style.display = displayStyle;
+            }
+        }
+        function filt3(phrase, _id) {
+            var words = phrase.value.toLowerCase().split(" ");
+            var table = document.getElementById(_id);
+            for (var r = 1; r < table.rows.length; r++) {
+                var cellsV = table.rows[r].cells[2].innerHTML.replace(/<[^>]+>/g, "");
+                var displayStyle = 'none';
+                for (var i = 0; i < words.length; i++) {
+                    if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                        displayStyle = '';
+                    else {
+                        displayStyle = 'none';
+                        break;
+                    }
+                }
+                table.rows[r].style.display = displayStyle;
+            }
+        }
+        function filt4(phrase, _id) {
+            var words = phrase.value.toLowerCase().split(" ");
+            var table = document.getElementById(_id);
+            for (var r = 1; r < table.rows.length; r++) {
+                var cellsV = table.rows[r].cells[3].innerHTML.replace(/<[^>]+>/g, "");
+                var displayStyle = 'none';
+                for (var i = 0; i < words.length; i++) {
+                    if (cellsV.toLowerCase().indexOf(words[i]) >= 0)
+                        displayStyle = '';
+                    else {
+                        displayStyle = 'none';
+                        break;
+                    }
+                }
+                table.rows[r].style.display = displayStyle;
+            }
+        }
+
+
+
+
